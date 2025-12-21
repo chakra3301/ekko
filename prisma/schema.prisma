@@ -1,0 +1,351 @@
+// Prisma schema for EKKO MVP
+// PostgreSQL database with optimized indexes and relations
+// Run `npm run db:generate` after making changes to generate Prisma Client
+// Run `npm run db:push` to push schema changes to your database (dev)
+// Run `npm run db:migrate` to create migrations (production)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum UserRole {
+  ARTIST
+  CLIENT
+}
+
+enum AvailabilityStatus {
+  OPEN // Available for new work
+  LIMITED // Limited availability
+  CLOSED // Not accepting new work
+}
+
+enum VerificationTier {
+  NONE // No verification
+  RED // Basic verification
+  BLACK // Premium verification
+  PLATINUM // Highest tier verification
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  TEXT
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationType {
+  PROFILE_VIEW
+  MESSAGE
+  LIKE
+  COMMENT
+}
+
+// ============================================================================
+// USER MODEL
+// ============================================================================
+
+model User {
+  id               String   @id @default(cuid())
+  email            String   @unique
+  name             String?
+  role             UserRole
+  profileCompleted Boolean  @default(false)
+  banned           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  artistProfile    ArtistProfile?
+  clientProfile    ClientProfile?
+  posts            Post[]         @relation("PostAuthor")
+  sentMessages     Message[]      @relation("MessageSender")
+  receivedMessages Message[]      @relation("MessageReceiver")
+  notifications    Notification[] @relation("NotificationTarget")
+  notificationsActed Notification[] @relation("NotificationActor")
+
+  // Indexes
+  // Index on role for filtering users by type (common query pattern)
+  @@index([role])
+  // Index on email for fast lookups (already unique, but explicit index helps)
+  @@index([email])
+  @@map("users")
+}
+
+// ============================================================================
+// ARTIST PROFILE MODEL
+// ============================================================================
+
+model ArtistProfile {
+  id               String             @id @default(cuid())
+  userId           String             @unique
+  displayName      String
+  bio              String?            @db.Text
+  locationCity     String?
+  locationCountry  String?
+  // Using PostgreSQL array type for disciplines and tools
+  // Tradeoff: Arrays are simpler than a separate table but less normalized
+  // For MVP, arrays are fine. Consider separate Discipline/Tool tables if you need
+  // to query "all artists with X discipline" frequently or add metadata to disciplines
+  disciplines      String[]           @default([])
+  tools            String[]           @default([])
+  availability     AvailabilityStatus @default(OPEN)
+  verificationTier VerificationTier   @default(NONE)
+  profileViews     Int                @default(0)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  // Relations
+  user                 User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolioItems       PortfolioItem[]
+  verificationRequests VerificationRequest[]
+  searchIndexHint      SearchIndexHint?
+  profileViewLogs      ProfileView[]
+
+  // Indexes
+  // GIN index on disciplines array for fast array containment queries
+  // e.g., WHERE 'Photography' = ANY(disciplines)
+  // Note: Prisma doesn't support custom operators in schema. For advanced GIN with trigram ops,
+  // create the index manually via migration: CREATE INDEX ... USING GIN (disciplines gin_trgm_ops)
+  @@index([disciplines], type: Gin)
+  // Index on verification tier for filtering verified artists
+  @@index([verificationTier])
+  // Index on availability for filtering available artists
+  @@index([availability])
+  // Composite index for common query: available verified artists
+  @@index([availability, verificationTier])
+  @@map("artist_profiles")
+}
+
+// ============================================================================
+// CLIENT PROFILE MODEL
+// ============================================================================
+
+model ClientProfile {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  companyName  String
+  // Using PostgreSQL array for industry tags
+  // Similar tradeoff as disciplines - arrays for MVP, consider separate table later
+  industryTags String[] @default([])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // GIN index on industryTags for fast tag-based searches
+  // Note: For advanced trigram operations, create index manually via migration
+  @@index([industryTags], type: Gin)
+  @@map("client_profiles")
+}
+
+// ============================================================================
+// PORTFOLIO ITEM MODEL
+// ============================================================================
+
+model PortfolioItem {
+  id           String    @id @default(cuid())
+  artistId     String
+  type         MediaType
+  title        String
+  description  String?   @db.Text
+  mediaUrl     String    @db.Text
+  thumbnailUrl String?   @db.Text
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  artist ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on artistId for fast portfolio lookups
+  @@index([artistId])
+  // Index on type for filtering by media type
+  @@index([type])
+  // Composite index for common query: artist's portfolio items by type
+  @@index([artistId, type])
+  @@map("portfolio_items")
+}
+
+// ============================================================================
+// POST MODEL
+// ============================================================================
+
+model Post {
+  id        String    @id @default(cuid())
+  authorId  String
+  content   String?   @db.Text
+  // Using PostgreSQL array for multiple media URLs
+  // Tradeoff: Arrays work well for MVP. Consider separate Media table if you need
+  // metadata per media item (dimensions, file size, etc.)
+  mediaUrls String[]  @default([])
+  postType  MediaType
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // Relations
+  author User @relation("PostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on authorId for user's posts feed
+  @@index([authorId])
+  // Index on createdAt for chronological feeds (most recent first)
+  @@index([createdAt(sort: Desc)])
+  // Composite index for user's posts sorted by date
+  @@index([authorId, createdAt(sort: Desc)])
+  // Index on postType for filtering by content type
+  @@index([postType])
+  @@map("posts")
+}
+
+// ============================================================================
+// MESSAGE MODEL
+// ============================================================================
+
+model Message {
+  id         String    @id @default(cuid())
+  senderId   String
+  receiverId String
+  body       String    @db.Text
+  // isRequest flag indicates if this is a project request vs regular message
+  // Tradeoff: Single table for simplicity. Consider separate Request table if
+  // requests need significantly different fields/metadata
+  isRequest  Boolean   @default(false)
+  readAt     DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  // Relations
+  sender   User @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver User @relation("MessageReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on receiverId for inbox queries (most common)
+  @@index([receiverId])
+  // Index on senderId for sent messages
+  @@index([senderId])
+  // Composite index for conversation threads (messages between two users)
+  @@index([senderId, receiverId])
+  // Index on isRequest for filtering project requests
+  @@index([isRequest])
+  // Index on readAt for unread message queries (NULL = unread)
+  @@index([receiverId, readAt])
+  @@map("messages")
+}
+
+// ============================================================================
+// VERIFICATION REQUEST MODEL
+// ============================================================================
+
+model VerificationRequest {
+  id           String             @id @default(cuid())
+  artistId     String
+  status       VerificationStatus @default(PENDING)
+  // Using PostgreSQL array for multiple evidence URLs
+  // Each request can include multiple pieces of evidence
+  evidenceUrls String[]           @default([])
+  adminNote    String?            @db.Text
+  createdAt    DateTime           @default(now())
+  reviewedAt   DateTime?
+  updatedAt    DateTime           @updatedAt
+
+  // Relations
+  artist ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on artistId for artist's verification history
+  @@index([artistId])
+  // Index on status for admin dashboard (filtering pending requests)
+  @@index([status])
+  // Composite index for common admin query: pending requests by date
+  @@index([status, createdAt(sort: Asc)])
+  @@map("verification_requests")
+}
+
+// ============================================================================
+// SEARCH INDEX HINT MODEL
+// ============================================================================
+
+model SearchIndexHint {
+  id        String   @id @default(cuid())
+  artistId  String   @unique
+  // Precomputed search rank score
+  // Tradeoff: Denormalized for performance. Update this when artist profile changes
+  // Consider using a database trigger or application-level job to keep in sync
+  score     Float    @default(0)
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  artist ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on score for sorting search results (most important)
+  @@index([score(sort: Desc)])
+  @@map("search_index_hints")
+}
+
+// ============================================================================
+// NOTIFICATION MODEL
+// ============================================================================
+
+model Notification {
+  id         String           @id @default(cuid())
+  type       NotificationType
+  actorId    String?          // User who triggered the notification (null for system notifications)
+  targetUserId String         // User who receives the notification
+  read       Boolean          @default(false)
+  // JSON metadata for additional context (e.g., postId, messageId, artistId)
+  metadata   Json?            @default("{}")
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  // Relations
+  actor      User?            @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  targetUser User             @relation("NotificationTarget", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on targetUserId for user's notifications (most common query)
+  @@index([targetUserId])
+  // Index on read status for unread notifications
+  @@index([targetUserId, read])
+  // Index on createdAt for sorting (most recent first)
+  @@index([targetUserId, createdAt(sort: Desc)])
+  @@map("notifications")
+}
+
+// ============================================================================
+// PROFILE VIEW LOG MODEL
+// ============================================================================
+
+model ProfileView {
+  id        String   @id @default(cuid())
+  artistId  String
+  viewerId  String?  // User who viewed (null for anonymous views)
+  createdAt DateTime @default(now())
+
+  // Relations
+  artist ArtistProfile @relation(fields: [artistId], references: [id], onDelete: Cascade)
+
+  // Indexes
+  // Index on artistId for profile view analytics
+  @@index([artistId])
+  // Index on createdAt for time-based analytics
+  @@index([artistId, createdAt(sort: Desc)])
+  @@map("profile_views")
+}
