@@ -33,8 +33,10 @@ export async function GET(req: Request): Promise<NextResponse<SearchArtistsRespo
     const cursor = searchParams.get('cursor') || undefined;
 
     // Build where clause
-    const where: Record<string, unknown> = {};
-    const andConditions: Array<Record<string, unknown>> = [];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: Record<string, any> = {};
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const andConditions: Array<Record<string, any>> = [];
 
     // Search query (displayName or bio) - OR within this filter
     if (q) {

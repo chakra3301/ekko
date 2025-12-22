@@ -69,7 +69,7 @@ export async function GET(req: Request): Promise<NextResponse<NotificationsRespo
         actorId: notification.actorId,
         targetUserId: notification.targetUserId,
         read: notification.read,
-        metadata: notification.metadata as Record<string, unknown> | null,
+        metadata: (notification.metadata as Record<string, unknown> | null) || null,
         createdAt: notification.createdAt.toISOString(),
         actor: notification.actor
           ? {

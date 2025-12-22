@@ -7,7 +7,8 @@ export interface NotificationResponse {
   actorId: string | null;
   targetUserId: string;
   read: boolean;
-  metadata: Record<string, unknown> | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  metadata: Record<string, any> | null;
   createdAt: string;
   actor?: {
     id: string;

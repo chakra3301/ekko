@@ -31,6 +31,7 @@ export async function POST(req: Request): Promise<NextResponse<{ received: boole
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (!webhookSecret) {
       // In development, skip signature verification
+      // eslint-disable-next-line no-console
       console.warn('STRIPE_WEBHOOK_SECRET not set, skipping signature verification');
     }
 
@@ -44,6 +45,7 @@ export async function POST(req: Request): Promise<NextResponse<{ received: boole
         event = JSON.parse(body) as Stripe.Event;
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.error('Webhook signature verification failed:', err);
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
@@ -58,6 +60,7 @@ export async function POST(req: Request): Promise<NextResponse<{ received: boole
       const requestedTier = session.metadata?.requestedTier as VerificationTier;
 
       if (!userId || !artistId || !requestedTier) {
+        // eslint-disable-next-line no-console
         console.error('Missing metadata in checkout session:', session.metadata);
         return NextResponse.json({ error: 'Missing metadata' }, { status: 400 });
       }

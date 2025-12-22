@@ -9,7 +9,7 @@ import type { ConversationsResponse, ConversationPreview } from '@/lib/types/mes
  * List all conversations for the authenticated user
  * Returns last message preview and unread count for each conversation
  */
-export async function GET(_req: Request): Promise<NextResponse<ConversationsResponse | { error: string }>> {
+export async function GET(): Promise<NextResponse<ConversationsResponse | { error: string }>> {
   const session = await auth();
   
   if (!session?.user?.id) {

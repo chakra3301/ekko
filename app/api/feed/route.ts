@@ -20,7 +20,7 @@ const VERIFICATION_TIER_PRIORITY: Record<VerificationTier, number> = {
  * mode=foryou: Sort by verificationTier desc, then createdAt desc
  */
 export async function GET(req: Request): Promise<NextResponse<FeedResponse | { error: string }>> {
-  await auth(); // Check authentication but don't use session for now
+  void auth(); // Check authentication but don't use session for now
   const { searchParams } = new URL(req.url);
 
   const mode = (searchParams.get('mode') || 'latest') as 'latest' | 'foryou';

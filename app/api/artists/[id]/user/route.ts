@@ -11,7 +11,7 @@ interface RouteParams {
  * Get user ID and display name from artist profile ID
  */
 export async function GET(
-  req: Request,
+  _req: Request,
   { params }: RouteParams
 ): Promise<NextResponse<{ userId: string; userName: string | null; displayName: string } | { error: string }>> {
   try {
@@ -39,6 +39,7 @@ export async function GET(
       displayName: artist.displayName,
     });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching artist user:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

@@ -21,7 +21,7 @@ jest.mock('next/navigation', () => ({
 
 // Mock portfolio upload
 jest.mock('@/components/portfolio/PortfolioUpload', () => ({
-  PortfolioUpload: ({ onUpload }: { onUpload: (items: Array<{ mediaUrl: string; type: string }>) => void }) => (
+  PortfolioUpload: ({ onUpload }: { onUpload: (items: Array<{ mediaUrl: string; type: string }>) => void }): React.ReactElement => (
     <div data-testid="portfolio-upload">
       <button
         onClick={() =>

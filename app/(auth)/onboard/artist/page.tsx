@@ -119,13 +119,6 @@ export default function ArtistOnboardingPage() {
     }
   };
 
-  // Validation error helper (currently unused but kept for future use)
-  // const _getValidationError = (): string | null => {
-  //   if (currentStep === 5 && data.portfolioItems.length < 3) {
-  //     return 'Please upload at least 3 portfolio items';
-  //   }
-  //   return null;
-  // };
 
   const handleSubmit = async () => {
     if (!canProceed()) {

@@ -9,7 +9,8 @@ export async function createNotification(params: {
   type: NotificationType;
   targetUserId: string;
   actorId?: string;
-  metadata?: Record<string, unknown>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  metadata?: Record<string, any>;
 }): Promise<void> {
   try {
     await prisma.notification.create({

@@ -88,8 +88,9 @@ export default function FeedPage() {
       // Refresh feed to show new post
       await fetchFeed();
     } catch (err) {
-      // Let PostComposer handle the error
-      setError(err instanceof Error ? err.message : 'Failed to create post');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create post';
+      setError(errorMessage);
+      throw err; // Re-throw for PostComposer to handle
     }
   };
 
@@ -171,17 +172,14 @@ export default function FeedPage() {
                 <PostCard
                   key={post.id}
                   post={post}
-                  onLike={(postId) => {
+                  onLike={() => {
                     // TODO: Implement like functionality
-                    void postId;
                   }}
-                  onSave={(postId) => {
+                  onSave={() => {
                     // TODO: Implement save functionality
-                    void postId;
                   }}
-                  onComment={(postId) => {
+                  onComment={() => {
                     // TODO: Implement comment functionality
-                    void postId;
                   }}
                 />
               ))}

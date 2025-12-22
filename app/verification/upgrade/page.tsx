@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
 export default function UpgradeVerificationPage() {
   const { data: session } = useSession();
-  const [_selectedTier, _setSelectedTier] = useState<'RED' | 'BLACK' | null>(null);
+  const [selectedTier] = useState<'RED' | 'BLACK' | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

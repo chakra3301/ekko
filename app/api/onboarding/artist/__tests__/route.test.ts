@@ -84,7 +84,7 @@ describe('POST /api/onboarding/artist', () => {
         updatedAt: new Date(),
       },
       clientProfile: null,
-    } as unknown);
+    } as unknown as Awaited<ReturnType<typeof mockPrisma.user.findUnique>>);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',
@@ -124,7 +124,7 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
       artistProfile: null,
       clientProfile: null,
-    } as unknown);
+    } as unknown as Awaited<ReturnType<typeof mockPrisma.user.findUnique>>);
 
     const createdProfile = {
       id: 'profile-123',
@@ -142,11 +142,11 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
     };
 
-    mockPrisma.artistProfile.create.mockResolvedValue(createdProfile as unknown);
+    mockPrisma.artistProfile.create.mockResolvedValue(createdProfile as unknown as Awaited<ReturnType<typeof mockPrisma.artistProfile.create>>);
     mockPrisma.user.update.mockResolvedValue({
       id: 'user-123',
       profileCompleted: true,
-    } as unknown);
+    } as unknown as Awaited<ReturnType<typeof mockPrisma.user.update>>);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',
@@ -194,7 +194,7 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
       artistProfile: null,
       clientProfile: null,
-    } as unknown);
+    } as unknown as Awaited<ReturnType<typeof mockPrisma.user.findUnique>>);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',

@@ -9,7 +9,7 @@ interface ProfileViewTrackerProps {
 }
 
 export function ProfileViewTracker({ artistId }: ProfileViewTrackerProps) {
-  useSession(); // Check session but don't use it for now
+  void useSession(); // Check session but don't use it for now
 
   useEffect(() => {
     // Track profile view
