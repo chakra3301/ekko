@@ -155,14 +155,14 @@ export const PostComposer: React.FC<PostComposerProps> = ({
                     <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
                       {file.type === 'IMAGE' ? (
                         <Image
-                          src={URL.createObjectURL(file.file)}
+                          src={file.mediaUrl}
                           alt={`Media ${index + 1}`}
                           fill
                           style={{ objectFit: 'cover' }}
                         />
                       ) : file.type === 'VIDEO' ? (
                         <video
-                          src={URL.createObjectURL(file.file)}
+                          src={file.mediaUrl}
                           controls
                           className="w-full h-full object-cover"
                         />
