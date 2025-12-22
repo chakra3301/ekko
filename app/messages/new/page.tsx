@@ -10,8 +10,8 @@ export default function NewConversationPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const artistId = searchParams.get('artistId');
-  const userId = searchParams.get('userId');
+  const artistId = searchParams?.get('artistId') || null;
+  const userId = searchParams?.get('userId') || null;
 
   const [targetUserId, setTargetUserId] = useState<string | null>(null);
   const [targetUserName, setTargetUserName] = useState<string>('');
