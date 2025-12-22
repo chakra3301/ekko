@@ -12,7 +12,7 @@ interface RouteParams {
  * Accept a message request (converts isRequest to false)
  */
 export async function POST(
-  req: Request,
+  _req: Request,
   { params }: RouteParams
 ): Promise<NextResponse<{ success: boolean } | { error: string }>> {
   const session = await auth();
@@ -59,6 +59,7 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error accepting request:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
