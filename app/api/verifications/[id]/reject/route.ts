@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { VerificationStatus } from '@prisma/client';
 import type { RejectVerificationRequest } from '@/lib/types/verification';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 interface RouteParams {
   params: Promise<{ id: string }>;
 }
@@ -66,6 +69,7 @@ export async function POST(
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error rejecting verification:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

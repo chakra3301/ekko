@@ -87,6 +87,7 @@ export async function POST(req: Request): Promise<NextResponse<VerificationReque
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating verification request:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

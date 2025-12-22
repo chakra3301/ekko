@@ -58,6 +58,7 @@ export function NotificationPanel({ onClose, onNotificationRead }: NotificationP
         onNotificationRead?.();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to mark notification as read:', error);
     }
   };
@@ -74,6 +75,7 @@ export function NotificationPanel({ onClose, onNotificationRead }: NotificationP
         onNotificationRead?.();
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to mark all as read:', error);
     }
   };

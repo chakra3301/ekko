@@ -86,6 +86,7 @@ export async function POST(req: Request): Promise<NextResponse<PostResponse | { 
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating post:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

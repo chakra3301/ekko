@@ -58,6 +58,7 @@ export async function POST(req: Request): Promise<NextResponse<{ success: boolea
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error tracking profile view:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

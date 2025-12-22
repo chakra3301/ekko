@@ -7,7 +7,7 @@ import { getStripeClient, handleWebhookEvent } from '@/lib/stripe';
 
 export async function POST(request: Request) {
   const body = await request.text();
-  const headersList = headers();
+  const headersList = await headers();
   const signature = headersList.get('stripe-signature');
 
   if (!signature) {
@@ -17,6 +17,7 @@ export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
+    // eslint-disable-next-line no-console
     console.error('STRIPE_WEBHOOK_SECRET is not configured');
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }

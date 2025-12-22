@@ -4,6 +4,9 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import type { ConversationMessagesResponse } from '@/lib/types/messages';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 interface RouteParams {
   params: Promise<{ userId: string }>;
 }
@@ -126,6 +129,7 @@ export async function GET(
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching conversation:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

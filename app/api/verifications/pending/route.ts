@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { VerificationStatus } from '@prisma/client';
 import type { PendingVerificationsResponse } from '@/lib/types/verification';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/verifications/pending
  * List all pending verification requests
@@ -63,6 +66,7 @@ export async function GET(req: Request): Promise<NextResponse<PendingVerificatio
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching pending verifications:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

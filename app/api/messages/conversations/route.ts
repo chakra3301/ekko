@@ -83,7 +83,10 @@ export async function GET(): Promise<NextResponse<ConversationsResponse | { erro
         });
       }
 
-      const conversation = conversationMap.get(partnerId)!;
+      const conversation = conversationMap.get(partnerId);
+      if (!conversation) {
+        continue; // Skip if conversation not found (should not happen)
+      }
       
       // Only add if this is the most recent message for this conversation
       // (since we're iterating in descending order)
@@ -132,6 +135,7 @@ export async function GET(): Promise<NextResponse<ConversationsResponse | { erro
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching conversations:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

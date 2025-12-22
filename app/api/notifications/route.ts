@@ -4,6 +4,9 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import type { NotificationsResponse } from '@/lib/types/notifications';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/notifications
  * List notifications for the authenticated user
@@ -96,6 +99,7 @@ export async function GET(req: Request): Promise<NextResponse<NotificationsRespo
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching notifications:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

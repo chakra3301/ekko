@@ -1,11 +1,11 @@
 // Success page after Stripe checkout
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
-export default function VerificationSuccessPage() {
+function VerificationSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams?.get('session_id') || null;
 
@@ -28,6 +28,18 @@ export default function VerificationSuccessPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function VerificationSuccessPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <VerificationSuccessContent />
+    </Suspense>
   );
 }
 

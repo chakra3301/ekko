@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma';
 import { AvailabilityStatus, VerificationTier } from '@prisma/client';
 import type { SearchArtistsResponse } from '@/lib/types/search';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/search/artists?q=&discipline=&location=&tool=&availability=&verification=&limit=&cursor=
  * Search artists with filters and pagination
@@ -148,6 +151,7 @@ export async function GET(req: Request): Promise<NextResponse<SearchArtistsRespo
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error searching artists:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

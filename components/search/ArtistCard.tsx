@@ -30,7 +30,7 @@ export const ArtistCard: React.FC<ArtistCardProps> = ({ artist }) => {
           <Avatar
             src={null}
             alt={artist.displayName}
-            size="large"
+            size="lg"
           />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">

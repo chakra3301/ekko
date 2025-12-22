@@ -34,6 +34,10 @@ export async function createCheckoutSession(params: {
 }): Promise<Stripe.Checkout.Session> {
   const stripe = getStripeClient();
 
+  if (!stripe) {
+    throw new Error('Stripe is not configured');
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
@@ -61,6 +65,10 @@ export async function createCustomer(params: {
   metadata?: Record<string, string>;
 }): Promise<Stripe.Customer> {
   const stripe = getStripeClient();
+
+  if (!stripe) {
+    throw new Error('Stripe is not configured');
+  }
 
   const customer = await stripe.customers.create({
     email: params.email,

@@ -27,6 +27,7 @@ export async function POST(): Promise<NextResponse<{ success: boolean } | { erro
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error marking all notifications as read:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

@@ -34,6 +34,7 @@ export function NotificationBell() {
         setUnreadCount(data.unreadCount || 0);
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to fetch unread count:', error);
     } finally {
       setLoading(false);

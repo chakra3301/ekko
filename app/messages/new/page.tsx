@@ -1,12 +1,12 @@
 // New conversation page - start a conversation with a user
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { ConversationView } from '@/components/messages/ConversationView';
 
-export default function NewConversationPage() {
+function NewConversationContent() {
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -118,6 +118,18 @@ export default function NewConversationPage() {
         />
       </div>
     </div>
+  );
+}
+
+export default function NewConversationPage() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <NewConversationContent />
+    </Suspense>
   );
 }
 

@@ -106,6 +106,7 @@ export async function POST(
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating checkout session:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }

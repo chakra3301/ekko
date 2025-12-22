@@ -5,6 +5,9 @@ import { prisma } from '@/lib/prisma';
 import { VerificationTier } from '@prisma/client';
 import type { FeedResponse } from '@/lib/types/posts';
 
+// Force dynamic rendering since we use request.url
+export const dynamic = 'force-dynamic';
+
 // Verification tier priority for ranking (higher = better)
 const VERIFICATION_TIER_PRIORITY: Record<VerificationTier, number> = {
   [VerificationTier.PLATINUM]: 4,
@@ -104,6 +107,7 @@ export async function GET(req: Request): Promise<NextResponse<FeedResponse | { e
 
     return NextResponse.json(response);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error fetching feed:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
