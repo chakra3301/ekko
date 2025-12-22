@@ -12,15 +12,15 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   
   // State
-  const [query, setQuery] = useState(searchParams.get('q') || '');
-  const [discipline, setDiscipline] = useState(searchParams.get('discipline') || '');
-  const [location, setLocation] = useState(searchParams.get('location') || '');
-  const [tool, setTool] = useState(searchParams.get('tool') || '');
+  const [query, setQuery] = useState(searchParams?.get('q') || '');
+  const [discipline, setDiscipline] = useState(searchParams?.get('discipline') || '');
+  const [location, setLocation] = useState(searchParams?.get('location') || '');
+  const [tool, setTool] = useState(searchParams?.get('tool') || '');
   const [availability, setAvailability] = useState<AvailabilityStatus | ''>(
-    (searchParams.get('availability') as AvailabilityStatus) || ''
+    (searchParams?.get('availability') as AvailabilityStatus) || ''
   );
   const [verification, setVerification] = useState<VerificationTier | ''>(
-    (searchParams.get('verification') as VerificationTier) || ''
+    (searchParams?.get('verification') as VerificationTier) || ''
   );
   
   const [artists, setArtists] = useState<ArtistSearchResult[]>([]);
