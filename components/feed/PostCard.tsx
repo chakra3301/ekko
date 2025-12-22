@@ -55,7 +55,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           <Avatar
             src={null}
             alt={displayName}
-            size="medium"
+            size="md"
           />
           <div className="flex flex-col">
             <div className="flex items-center gap-2">

@@ -203,7 +203,7 @@ export const ConversationView: React.FC<ConversationViewProps> = ({
       {/* Header */}
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Avatar src={null} alt={userDisplayName} size="medium" />
+          <Avatar src={null} alt={userDisplayName} size="md" />
           <div>
             <h3 className="font-semibold text-gray-900">{userDisplayName}</h3>
             <p className="text-sm text-gray-500">{userName || 'User'}</p>
