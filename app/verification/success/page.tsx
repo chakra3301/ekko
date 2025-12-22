@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export default function VerificationSuccessPage() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get('session_id');
+  const sessionId = searchParams?.get('session_id') || null;
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
