@@ -2,7 +2,6 @@
 import {
   uploadPortfolioFile,
   validatePortfolioFile,
-  type MediaType,
 } from './portfolio-upload';
 
 // Mock storage

@@ -70,12 +70,12 @@ export async function POST(req: Request): Promise<NextResponse<{ received: boole
         },
       });
 
-      console.log(`Updated artist ${artistId} to ${requestedTier} tier`);
+      // Artist tier updated successfully
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Error processing webhook:', error);
+    // Error processing webhook - log to error tracking service
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

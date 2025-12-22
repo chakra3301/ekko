@@ -1,5 +1,4 @@
 // Type definitions for messaging system
-import { UserRole } from '@prisma/client';
 
 export interface CreateMessageRequest {
   receiverId: string;

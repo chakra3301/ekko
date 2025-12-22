@@ -3,7 +3,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Avatar } from '@/components/ui/Avatar';
 import { VerificationBadge } from '@/components/ui/VerificationBadge';
 import { AvailabilityPill } from '@/components/ui/AvailabilityPill';

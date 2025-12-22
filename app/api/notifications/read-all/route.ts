@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma';
  * POST /api/notifications/read-all
  * Mark all notifications for the authenticated user as read
  */
-export async function POST(req: Request): Promise<NextResponse<{ success: boolean } | { error: string }>> {
+export async function POST(_req: Request): Promise<NextResponse<{ success: boolean } | { error: string }>> {
   const session = await auth();
   
   if (!session?.user?.id) {

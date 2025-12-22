@@ -9,7 +9,7 @@ interface ProfileViewTrackerProps {
 }
 
 export function ProfileViewTracker({ artistId }: ProfileViewTrackerProps) {
-  const { data: session } = useSession();
+  useSession(); // Check session but don't use it for now
 
   useEffect(() => {
     // Track profile view
@@ -25,7 +25,7 @@ export function ProfileViewTracker({ artistId }: ProfileViewTrackerProps) {
         });
       } catch (error) {
         // Silently fail - analytics are non-critical
-        console.error('Failed to track profile view:', error);
+        // Silently fail - analytics are non-critical
       }
     };
 

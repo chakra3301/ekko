@@ -194,6 +194,7 @@ export default function ApplyVerificationPage() {
                 <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-4">
                   {evidenceUrls.map((url, index) => (
                     <div key={index} className="relative group">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={url}
                         alt={`Evidence ${index + 1}`}

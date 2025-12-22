@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { VerificationStatus } from '@prisma/client';
-import type { PendingVerificationsResponse, VerificationRequestResponse } from '@/lib/types/verification';
+import type { PendingVerificationsResponse } from '@/lib/types/verification';
 
 /**
  * GET /api/verifications/pending

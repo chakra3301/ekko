@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { VerificationTier } from '@prisma/client';
-import type { FeedResponse, FeedQueryParams } from '@/lib/types/posts';
+import type { FeedResponse } from '@/lib/types/posts';
 
 // Verification tier priority for ranking (higher = better)
 const VERIFICATION_TIER_PRIORITY: Record<VerificationTier, number> = {
@@ -20,7 +20,7 @@ const VERIFICATION_TIER_PRIORITY: Record<VerificationTier, number> = {
  * mode=foryou: Sort by verificationTier desc, then createdAt desc
  */
 export async function GET(req: Request): Promise<NextResponse<FeedResponse | { error: string }>> {
-  const session = await auth();
+  await auth(); // Check authentication but don't use session for now
   const { searchParams } = new URL(req.url);
 
   const mode = (searchParams.get('mode') || 'latest') as 'latest' | 'foryou';

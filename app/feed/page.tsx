@@ -24,6 +24,7 @@ export default function FeedPage() {
 
   useEffect(() => {
     fetchFeed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode]);
 
   const fetchFeed = async (loadMore = false) => {
@@ -87,7 +88,8 @@ export default function FeedPage() {
       // Refresh feed to show new post
       await fetchFeed();
     } catch (err) {
-      throw err; // Re-throw to let PostComposer handle the error
+      // Let PostComposer handle the error
+      setError(err instanceof Error ? err.message : 'Failed to create post');
     }
   };
 
@@ -170,16 +172,16 @@ export default function FeedPage() {
                   key={post.id}
                   post={post}
                   onLike={(postId) => {
-                    console.log('Like post:', postId);
                     // TODO: Implement like functionality
+                    void postId;
                   }}
                   onSave={(postId) => {
-                    console.log('Save post:', postId);
                     // TODO: Implement save functionality
+                    void postId;
                   }}
                   onComment={(postId) => {
-                    console.log('Comment on post:', postId);
                     // TODO: Implement comment functionality
+                    void postId;
                   }}
                 />
               ))}

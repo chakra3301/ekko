@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { NotificationsResponse, NotificationResponse } from '@/lib/types/notifications';
+import type { NotificationsResponse } from '@/lib/types/notifications';
 
 /**
  * GET /api/notifications
@@ -21,7 +21,10 @@ export async function GET(req: Request): Promise<NextResponse<NotificationsRespo
     const limit = Math.min(parseInt(searchParams.get('limit') || '50', 10), 100);
     const unreadOnly = searchParams.get('unreadOnly') === 'true';
 
-    const where: any = {
+    const where: {
+      targetUserId: string;
+      read?: boolean;
+    } = {
       targetUserId: session.user.id,
     };
 
@@ -66,7 +69,7 @@ export async function GET(req: Request): Promise<NextResponse<NotificationsRespo
         actorId: notification.actorId,
         targetUserId: notification.targetUserId,
         read: notification.read,
-        metadata: notification.metadata as Record<string, any> | null,
+        metadata: notification.metadata as Record<string, unknown> | null,
         createdAt: notification.createdAt.toISOString(),
         actor: notification.actor
           ? {

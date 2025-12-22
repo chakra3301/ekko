@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { AvailabilityStatus, VerificationTier } from '@prisma/client';
-import type { SearchArtistsResponse, SearchArtistsQueryParams } from '@/lib/types/search';
+import type { SearchArtistsResponse } from '@/lib/types/search';
 
 /**
  * GET /api/search/artists?q=&discipline=&location=&tool=&availability=&verification=&limit=&cursor=
@@ -33,8 +33,8 @@ export async function GET(req: Request): Promise<NextResponse<SearchArtistsRespo
     const cursor = searchParams.get('cursor') || undefined;
 
     // Build where clause
-    const where: any = {};
-    const andConditions: any[] = [];
+    const where: Record<string, unknown> = {};
+    const andConditions: Array<Record<string, unknown>> = [];
 
     // Search query (displayName or bio) - OR within this filter
     if (q) {

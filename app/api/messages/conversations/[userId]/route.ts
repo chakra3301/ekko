@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import type { ConversationMessagesResponse, MessageResponse } from '@/lib/types/messages';
+import type { ConversationMessagesResponse } from '@/lib/types/messages';
 
 interface RouteParams {
   params: Promise<{ userId: string }>;

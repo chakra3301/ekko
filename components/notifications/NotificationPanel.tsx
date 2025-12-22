@@ -12,7 +12,8 @@ interface NotificationPanelProps {
 }
 
 export function NotificationPanel({ onClose, onNotificationRead }: NotificationPanelProps) {
-  const router = useRouter();
+  // Router available for future navigation
+  void useRouter();
   const [notifications, setNotifications] = useState<NotificationResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

@@ -7,7 +7,7 @@ export interface NotificationResponse {
   actorId: string | null;
   targetUserId: string;
   read: boolean;
-  metadata: Record<string, any> | null;
+  metadata: Record<string, unknown> | null;
   createdAt: string;
   actor?: {
     id: string;

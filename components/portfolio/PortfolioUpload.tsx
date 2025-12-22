@@ -156,6 +156,7 @@ export function PortfolioUpload({
                 className="relative border rounded-lg overflow-hidden bg-gray-50"
               >
                 {types[index] === 'IMAGE' && previews[index] ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={previews[index]}
                     alt={file.name}

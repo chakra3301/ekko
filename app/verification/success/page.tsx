@@ -1,12 +1,11 @@
 // Success page after Stripe checkout
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 
 export default function VerificationSuccessPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
 
@@ -16,7 +15,7 @@ export default function VerificationSuccessPage() {
         <div className="text-green-600 text-5xl mb-4">✓</div>
         <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful</h2>
         <p className="text-gray-600 mb-4">
-          Your verification tier upgrade is being processed. You'll receive a confirmation email shortly.
+          Your verification tier upgrade is being processed. You&apos;ll receive a confirmation email shortly.
         </p>
         {sessionId && (
           <p className="text-xs text-gray-500 mb-4">Session ID: {sessionId}</p>

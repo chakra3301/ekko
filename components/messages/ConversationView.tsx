@@ -39,6 +39,7 @@ export const ConversationView: React.FC<ConversationViewProps> = ({
     if (userId && currentUserId) {
       fetchMessages();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, currentUserId]);
 
   useEffect(() => {

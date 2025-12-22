@@ -84,7 +84,7 @@ describe('POST /api/onboarding/artist', () => {
         updatedAt: new Date(),
       },
       clientProfile: null,
-    } as any);
+    } as unknown);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',
@@ -124,7 +124,7 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
       artistProfile: null,
       clientProfile: null,
-    } as any);
+    } as unknown);
 
     const createdProfile = {
       id: 'profile-123',
@@ -146,7 +146,7 @@ describe('POST /api/onboarding/artist', () => {
     mockPrisma.user.update.mockResolvedValue({
       id: 'user-123',
       profileCompleted: true,
-    } as any);
+    } as unknown);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',
@@ -194,7 +194,7 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
       artistProfile: null,
       clientProfile: null,
-    } as any);
+    } as unknown);
 
     const request = new NextRequest('http://localhost:3000/api/onboarding/artist', {
       method: 'POST',

@@ -12,11 +12,12 @@ export default function MessagesPage() {
   const [selectedUserName, setSelectedUserName] = useState<string>('');
   const [selectedUserDisplayName, setSelectedUserDisplayName] = useState<string>('');
 
-  const handleSelectConversation = (userId: string, userName?: string, userDisplayName?: string) => {
-    setSelectedUserId(userId);
-    setSelectedUserName(userName || '');
-    setSelectedUserDisplayName(userDisplayName || '');
-  };
+  // Conversation selection handler (currently unused but kept for future use)
+  // const _handleSelectConversation = (userId: string, userName?: string, userDisplayName?: string) => {
+  //   setSelectedUserId(userId);
+  //   setSelectedUserName(userName || '');
+  //   setSelectedUserDisplayName(userDisplayName || '');
+  // };
 
   if (!session) {
     return (

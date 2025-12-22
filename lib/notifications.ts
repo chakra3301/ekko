@@ -9,7 +9,7 @@ export async function createNotification(params: {
   type: NotificationType;
   targetUserId: string;
   actorId?: string;
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }): Promise<void> {
   try {
     await prisma.notification.create({

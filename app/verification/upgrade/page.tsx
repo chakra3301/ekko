@@ -3,13 +3,9 @@
 
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { VerificationTier } from '@prisma/client';
-
 export default function UpgradeVerificationPage() {
   const { data: session } = useSession();
-  const router = useRouter();
-  const [selectedTier, setSelectedTier] = useState<'RED' | 'BLACK' | null>(null);
+  const [_selectedTier, _setSelectedTier] = useState<'RED' | 'BLACK' | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

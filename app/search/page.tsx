@@ -84,6 +84,7 @@ export default function SearchPage() {
   // Fetch on mount and when filters change
   useEffect(() => {
     fetchArtists();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, discipline, location, tool, availability, verification]);
 
   const handleLoadMore = () => {

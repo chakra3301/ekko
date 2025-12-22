@@ -119,12 +119,13 @@ export default function ArtistOnboardingPage() {
     }
   };
 
-  const getValidationError = (): string | null => {
-    if (currentStep === 5 && data.portfolioItems.length < 3) {
-      return 'Please upload at least 3 portfolio items';
-    }
-    return null;
-  };
+  // Validation error helper (currently unused but kept for future use)
+  // const _getValidationError = (): string | null => {
+  //   if (currentStep === 5 && data.portfolioItems.length < 3) {
+  //     return 'Please upload at least 3 portfolio items';
+  //   }
+  //   return null;
+  // };
 
   const handleSubmit = async () => {
     if (!canProceed()) {
@@ -211,7 +212,7 @@ export default function ArtistOnboardingPage() {
           {/* Step 1: Display Name */}
           {currentStep === 1 && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-gray-900">What's your display name?</h2>
+              <h2 className="text-2xl font-bold text-gray-900">What&apos;s your display name?</h2>
               <p className="text-gray-600">
                 This is how clients will see you on EKKO.
               </p>

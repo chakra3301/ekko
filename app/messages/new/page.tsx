@@ -65,7 +65,7 @@ export default function NewConversationPage() {
       const response = await fetch('/api/messages/conversations');
       if (response.ok) {
         const data = await response.json();
-        const conversation = data.conversations.find((c: any) => c.userId === id);
+        const conversation = data.conversations.find((c: { userId: string }) => c.userId === id);
         if (conversation) {
           setTargetUserName(conversation.userName || '');
           setTargetUserDisplayName(conversation.userDisplayName);
