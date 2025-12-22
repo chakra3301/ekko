@@ -272,7 +272,7 @@ export const ConversationView: React.FC<ConversationViewProps> = ({
             >
               <div className={`flex gap-2 max-w-[70%] ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
                 {!isMe && (
-                  <Avatar src={null} alt={senderDisplayName} size="small" />
+                  <Avatar src={null} alt={senderDisplayName} size="sm" />
                 )}
                 <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                   {!isMe && (
