@@ -142,7 +142,7 @@ describe('POST /api/onboarding/artist', () => {
       updatedAt: new Date(),
     };
 
-    mockPrisma.artistProfile.create.mockResolvedValue(createdProfile as any);
+    mockPrisma.artistProfile.create.mockResolvedValue(createdProfile as unknown);
     mockPrisma.user.update.mockResolvedValue({
       id: 'user-123',
       profileCompleted: true,
