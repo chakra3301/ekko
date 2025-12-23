@@ -4,6 +4,7 @@
 import EmailProvider from 'next-auth/providers/email';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from './prisma';
 import { UserRole } from '@prisma/client';
 
@@ -11,15 +12,19 @@ import { UserRole } from '@prisma/client';
  * NextAuth configuration
  * Configure authentication providers and session management
  * Environment variables required:
- * - NEXTAUTH_URL: Your application URL
- * - NEXTAUTH_SECRET: Secret for JWT encryption (generate with: openssl rand -base64 32)
+ * - AUTH_URL or NEXTAUTH_URL: Your application URL (NextAuth v5 uses AUTH_URL)
+ * - AUTH_SECRET or NEXTAUTH_SECRET: Secret for JWT encryption (NextAuth v5 uses AUTH_SECRET)
+ *   Generate with: openssl rand -base64 32
  * - EMAIL_SERVER: SMTP server configuration (JSON string)
  * - EMAIL_FROM: Email address to send from
  * - GOOGLE_CLIENT_ID: Google OAuth client ID
  * - GOOGLE_CLIENT_SECRET: Google OAuth client secret
  */
 // Build providers array conditionally based on environment variables
-const providers = [];
+import type { NextAuthConfig } from 'next-auth';
+
+const providers: NextAuthConfig['providers'] = [];
+
 
 // Add Email provider if configured (and not a placeholder)
 if (process.env.EMAIL_SERVER && !process.env.EMAIL_SERVER.includes('example.com')) {
@@ -95,13 +100,29 @@ if (providers.length === 0) {
   );
 }
 
+// Validate required environment variables
+// NextAuth v5 uses AUTH_SECRET, but fallback to NEXTAUTH_SECRET for compatibility
+const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET;
+if (!authSecret) {
+  // eslint-disable-next-line no-console
+  console.error(
+    '⚠️  AUTH_SECRET (or NEXTAUTH_SECRET) is not set. Please add it to your .env.local file.\n' +
+    '   NextAuth v5 uses AUTH_SECRET. Generate one with: openssl rand -base64 32\n' +
+    '   Add to .env.local: AUTH_SECRET=your-generated-secret'
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const authOptions: any = {
+  // Only add adapter if using Email provider (required for Email, optional for JWT with Credentials)
+  adapter: PrismaAdapter(prisma),
+
   providers,
   // Use default NextAuth pages (remove custom pages config to avoid 404s)
   // pages: {
   //   signIn: '/auth/signin',
   // },
+  trustHost: true, // Required for NextAuth v5 in development
   session: {
     strategy: 'jwt' as const, // Use JWT for stateless sessions
     maxAge: 30 * 24 * 60 * 60, // 30 days

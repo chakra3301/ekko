@@ -50,8 +50,8 @@ cp .env.example .env.local
 | Variable | Description | How to Get |
 |----------|-------------|------------|
 | `DATABASE_URL` | PostgreSQL connection string | From your database provider |
-| `NEXTAUTH_URL` | Application URL | `http://localhost:3000` (dev) or `https://yourdomain.com` (prod) |
-| `NEXTAUTH_SECRET` | JWT encryption secret | Generate: `openssl rand -base64 32` |
+| `AUTH_URL` or `NEXTAUTH_URL` | Application URL | `http://localhost:3000` (dev) or `https://yourdomain.com` (prod)<br/>NextAuth v5 uses `AUTH_URL`, v4 uses `NEXTAUTH_URL` |
+| `AUTH_SECRET` or `NEXTAUTH_SECRET` | JWT encryption secret | Generate: `openssl rand -base64 32`<br/>NextAuth v5 uses `AUTH_SECRET`, v4 uses `NEXTAUTH_SECRET` |
 
 #### **Authentication**
 
@@ -59,7 +59,7 @@ cp .env.example .env.local
 |----------|-------------|------------|
 | `EMAIL_SERVER` | SMTP server URL | From your email provider (Gmail, SendGrid, AWS SES) |
 | `EMAIL_FROM` | Sender email address | Your verified email |
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID | [Google Cloud Console](https://console.cloud.google.com/) |
+| `GOOGLE_CLIENT_ID` | Google OAuth client ID | [Google Cloud Console]() |https://console.cloud.google.com/
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret | [Google Cloud Console](https://console.cloud.google.com/) |
 
 #### **Payments (Stripe)**
@@ -250,8 +250,8 @@ Add all environment variables from `.env.example` in Vercel:
 
 **Critical Variables to Set:**
 - `DATABASE_URL` (production database)
-- `NEXTAUTH_URL` (your production domain)
-- `NEXTAUTH_SECRET` (generated secret)
+- `AUTH_URL` or `NEXTAUTH_URL` (your production domain, e.g., `https://your-app.vercel.app`)
+- `AUTH_SECRET` or `NEXTAUTH_SECRET` (generated secret)
 - `STRIPE_SECRET_KEY` (Stripe live key)
 - `STRIPE_WEBHOOK_SECRET` (production webhook secret)
 - `ADMIN_SECRET` (admin operations)
@@ -303,7 +303,7 @@ vercel --prod
 1. Go to Project → Settings → Domains
 2. Add your custom domain
 3. Update DNS records as instructed
-4. Update `NEXTAUTH_URL` to your custom domain
+4. Update `AUTH_URL` or `NEXTAUTH_URL` to your custom domain
 
 ### 8. Post-Deployment Checklist
 
@@ -809,9 +809,9 @@ npm run db:studio
 
 #### **NextAuth Errors**
 
-- Verify `NEXTAUTH_URL` matches your domain
-- Check `NEXTAUTH_SECRET` is set
-- Verify OAuth redirect URIs in Google Console
+- Verify `AUTH_URL` or `NEXTAUTH_URL` matches your domain exactly
+- Check `AUTH_SECRET` or `NEXTAUTH_SECRET` is set
+- Verify OAuth redirect URIs in Google Console match your production domain
 
 #### **Stripe Webhook Failures**
 

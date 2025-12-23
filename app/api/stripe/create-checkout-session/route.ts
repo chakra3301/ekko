@@ -95,8 +95,8 @@ export async function POST(
         artistId: artistProfile.id,
         requestedTier: body.tier,
       },
-      success_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/verification/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/verification/cancel`,
+      success_url: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/verification/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.AUTH_URL || process.env.NEXTAUTH_URL || 'http://localhost:3000'}/verification/cancel`,
     });
 
     const response: CreateCheckoutSessionResponse = {
