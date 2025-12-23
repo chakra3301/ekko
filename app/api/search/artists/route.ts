@@ -153,7 +153,32 @@ export async function GET(req: Request): Promise<NextResponse<SearchArtistsRespo
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error searching artists:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    
+    // Provide more helpful error messages
+    if (error instanceof Error) {
+      // Check for database connection errors
+      if (error.message.includes('Can\'t reach database server') || 
+          error.message.includes('P1001') ||
+          error.message.includes('connection')) {
+        return NextResponse.json(
+          { error: 'Database connection failed. Please check DATABASE_URL environment variable.' },
+          { status: 500 }
+        );
+      }
+      
+      // Check for Prisma Client errors
+      if (error.message.includes('PrismaClient') || error.message.includes('P1003')) {
+        return NextResponse.json(
+          { error: 'Database schema error. Please ensure Prisma migrations are applied.' },
+          { status: 500 }
+        );
+      }
+    }
+    
+    return NextResponse.json(
+      { error: 'Internal Server Error', details: process.env.NODE_ENV === 'development' ? error instanceof Error ? error.message : String(error) : undefined },
+      { status: 500 }
+    );
   }
 }
 
