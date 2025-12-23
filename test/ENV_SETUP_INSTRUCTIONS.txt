@@ -1,0 +1,19 @@
+🔧 CRITICAL: Add these to .env.local
+
+Open .env.local in your project root and add these lines:
+
+DATABASE_URL=postgresql://postgres:DapZrEFgu2qrU3Ze@db.chklrmyejzzjegfitauk.supabase.co:5432/postgres?sslmode=require
+NEXTAUTH_URL=http://localhost:3001
+NEXTAUTH_SECRET=zeR/H84t1nqHSJYrYv/ufpNWN0ExabnEGuTDsqgd2iA=
+
+OR (NextAuth v5 format - both work):
+AUTH_URL=http://localhost:3001
+AUTH_SECRET=zeR/H84t1nqHSJYrYv/ufpNWN0ExabnEGuTDsqgd2iA=
+
+⚠️  After adding, RESTART your dev server:
+1. Stop server (Ctrl+C)
+2. Run: npm run dev
+3. Wait for "Ready" message
+4. Visit: http://localhost:3001/api/auth/signin
+
+✅ You should see the sign-in page (not Configuration error)
